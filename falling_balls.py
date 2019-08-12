@@ -3,6 +3,7 @@ import pygame
 pygame.init()
 size = width, height = 400, 300
 screen = pygame.display.set_mode(size)
+baked_screen = pygame.Surface(screen.get_size())
 
 active_circles_positions = set()
 
@@ -30,6 +31,7 @@ while is_running:
             print("button pressed", event.pos)
             active_circles_positions.add(event.pos)
 
+    screen.blit(baked_screen, (0, 0))
     draw_active_circles()
     process_circles_positions()
 
