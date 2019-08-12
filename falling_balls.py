@@ -1,4 +1,4 @@
-import pygame
+import pygame, random
 
 pygame.init()
 size = width, height = 400, 300
@@ -14,8 +14,9 @@ active_circles = set()
 
 
 class Circle:
-    def __init__(self, pos):
+    def __init__(self, pos, color):
         self.pos = pos
+        self.color = color
 
     def get_position(self):
         return self.pos
@@ -26,10 +27,13 @@ class Circle:
     def get_int_position(self):
         return tuple(map(int, self.pos))
 
+    def get_color(self):
+        return self.color
+
 
 def draw_active_circles():
     for circle in active_circles:
-        pygame.draw.circle(screen, circle_color, circle.get_int_position(), circle_radius)
+        pygame.draw.circle(screen, circle.get_color(), circle.get_int_position(), circle_radius)
 
 
 def process_circles_positions():
@@ -44,7 +48,7 @@ def process_circles_positions():
 
     for circle in active_circles:
         if is_fallen(circle):
-            pygame.draw.circle(baked_screen, circle_color, circle.get_int_position(), circle_radius)
+            pygame.draw.circle(baked_screen, circle.get_color(), circle.get_int_position(), circle_radius)
 
     active_circles = set(filter(lambda c: not is_fallen(c), active_circles))
 
@@ -58,7 +62,7 @@ while is_running:
             is_running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             print("button pressed", event.pos)
-            active_circles.add(Circle(event.pos))
+            active_circles.add(Circle(event.pos, circle_color))
 
     screen.blit(baked_screen, (0, 0))
     draw_active_circles()
