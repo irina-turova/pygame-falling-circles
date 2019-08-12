@@ -17,6 +17,10 @@ def process_circles_positions():
     global active_circles_positions
     active_circles_positions = set(map(lambda p: (p[0], p[1] + 1), active_circles_positions))
 
+    for pos in active_circles_positions:
+        if pos[1] >= height:
+            pygame.draw.circle(baked_screen, (0, 0, 255), pos, 10)
+
     active_circles_positions = set(filter(lambda p: p[1] < height, active_circles_positions))
 
 
