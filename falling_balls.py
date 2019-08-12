@@ -10,28 +10,43 @@ clock = pygame.time.Clock()
 circle_color = (0, 0, 255)
 circle_radius = 10
 pixels_per_second_speed = 100
-active_circles_positions = set()
+active_circles = set()
+
+
+class Circle:
+    def __init__(self, pos):
+        self.pos = pos
+
+    def get_position(self):
+        return self.pos
+
+    def set_position(self, x, y):
+        self.pos = (x, y)
+
+    def get_int_position(self):
+        return tuple(map(int, self.pos))
 
 
 def draw_active_circles():
-    for pos in active_circles_positions:
-        pygame.draw.circle(screen, circle_color, tuple(map(int, pos)), circle_radius)
+    for circle in active_circles:
+        pygame.draw.circle(screen, circle_color, circle.get_int_position(), circle_radius)
 
 
 def process_circles_positions():
+    def is_fallen(circle):
+        return circle.get_position()[1] >= height - circle_radius
 
-    def is_fallen(pos):
-        return pos[1] >= height - circle_radius
+    global active_circles
 
-    global active_circles_positions
     seconds_tick = clock.tick() / 1000
-    active_circles_positions = set(map(lambda p: (p[0], p[1] + pixels_per_second_speed * seconds_tick), active_circles_positions))
+    for circle in active_circles:
+        circle.set_position(circle.get_position()[0], circle.get_position()[1] + pixels_per_second_speed * seconds_tick)
 
-    for pos in active_circles_positions:
-        if is_fallen(pos):
-            pygame.draw.circle(baked_screen, circle_color, tuple(map(int, pos)), circle_radius)
+    for circle in active_circles:
+        if is_fallen(circle):
+            pygame.draw.circle(baked_screen, circle_color, circle.get_int_position(), circle_radius)
 
-    active_circles_positions = set(filter(lambda p: not is_fallen(p), active_circles_positions))
+    active_circles = set(filter(lambda c: not is_fallen(c), active_circles))
 
 
 is_running = True
@@ -43,7 +58,7 @@ while is_running:
             is_running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             print("button pressed", event.pos)
-            active_circles_positions.add(event.pos)
+            active_circles.add(Circle(event.pos))
 
     screen.blit(baked_screen, (0, 0))
     draw_active_circles()
