@@ -7,7 +7,6 @@ baked_screen = pygame.Surface(screen.get_size())
 
 clock = pygame.time.Clock()
 
-circle_color = (0, 0, 255)
 circle_radius = 10
 pixels_per_second_speed = 100
 active_circles = set()
@@ -53,6 +52,13 @@ def process_circles_positions():
     active_circles = set(filter(lambda c: not is_fallen(c), active_circles))
 
 
+def get_random_color():
+    color = pygame.Color(0, 0, 0)
+    hsv = random.randint(0, 360), random.randint(50, 100), random.randint(50, 100)
+    color.hsva = hsv + (100,)
+    return color
+
+
 is_running = True
 while is_running:
     screen.fill((0, 0, 0))
@@ -62,7 +68,7 @@ while is_running:
             is_running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             print("button pressed", event.pos)
-            active_circles.add(Circle(event.pos, circle_color))
+            active_circles.add(Circle(event.pos, get_random_color()))
 
     screen.blit(baked_screen, (0, 0))
     draw_active_circles()
