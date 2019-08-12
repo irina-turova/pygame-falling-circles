@@ -16,6 +16,8 @@ def process_circles_positions():
     global active_circles_positions
     active_circles_positions = set(map(lambda p: (p[0], p[1] + 1), active_circles_positions))
 
+    active_circles_positions = set(filter(lambda p: p[1] < height, active_circles_positions))
+
 
 is_running = True
 while is_running:
