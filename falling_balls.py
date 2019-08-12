@@ -5,12 +5,14 @@ size = width, height = 400, 300
 screen = pygame.display.set_mode(size)
 baked_screen = pygame.Surface(screen.get_size())
 
+
+circle_color = (0, 0, 255)
 active_circles_positions = set()
 
 
 def draw_active_circles():
     for pos in active_circles_positions:
-        pygame.draw.circle(screen, (0, 0, 255), pos, 10)
+        pygame.draw.circle(screen, circle_color, pos, 10)
 
 
 def process_circles_positions():
@@ -19,7 +21,7 @@ def process_circles_positions():
 
     for pos in active_circles_positions:
         if pos[1] >= height:
-            pygame.draw.circle(baked_screen, (0, 0, 255), pos, 10)
+            pygame.draw.circle(baked_screen, circle_color, pos, 10)
 
     active_circles_positions = set(filter(lambda p: p[1] < height, active_circles_positions))
 
