@@ -12,6 +12,11 @@ def draw_active_circles():
         pygame.draw.circle(screen, (0, 0, 255), pos, 10)
 
 
+def process_circles_positions():
+    global active_circles_positions
+    active_circles_positions = set(map(lambda p: (p[0], p[1] + 1), active_circles_positions))
+
+
 is_running = True
 while is_running:
     screen.fill((0, 0, 0))
@@ -24,6 +29,7 @@ while is_running:
             active_circles_positions.add(event.pos)
 
     draw_active_circles()
+    process_circles_positions()
 
     pygame.display.flip()
 
